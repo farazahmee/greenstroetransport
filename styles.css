@@ -197,7 +197,7 @@ body {
 
 /* Stats Section */
 .stats-section {
-    background: var(--light);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     padding: 60px 0;
 }
 
@@ -211,14 +211,25 @@ body {
     text-align: center;
 }
 
+.stat-item {
+    color: var(--white);
+}
+
+.stat-icon {
+    font-size: 3rem;
+    color: var(--secondary-orange);
+    margin-bottom: 1rem;
+}
+
 .stat-item h3 {
     font-size: 2.5rem;
-    color: var(--secondary-orange);
+    color: var(--white);
     margin-bottom: 0.5rem;
+    font-weight: 700;
 }
 
 .stat-item p {
-    color: var(--gray);
+    color: #ccc;
     font-size: 1rem;
 }
 
