@@ -1,59 +1,59 @@
-// Counter animation for stats
-let countersStarted = false;
+// Ultra-reliable counter animation
+(function() {
+    let animated = false;
 
-function startCounters() {
-    const counters = document.querySelectorAll('.counter');
-    
-    counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-target'));
-        const duration = 2000; // 2 seconds
-        const increment = target / (duration / 16); // 60fps
-        let current = 0;
-        
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                counter.textContent = target.toLocaleString();
-                clearInterval(timer);
-            } else {
-                counter.textContent = Math.floor(current).toLocaleString();
-            }
-        }, 16);
-    });
-}
+    function animate() {
+        if (animated) return;
 
-// Check if element is in viewport
-function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-    return (
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.bottom >= 0
-    );
-}
+        const elements = document.querySelectorAll('.counter');
+        const targets = [60, 2640, 2836, 75];
 
-// Listen for scroll events
-window.addEventListener('scroll', function() {
-    if (!countersStarted) {
-        const statsSection = document.querySelector('.why-choose');
-        if (statsSection && isElementInViewport(statsSection)) {
-            countersStarted = true;
-            startCounters();
-        }
+        elements.forEach((el, index) => {
+            let count = 0;
+            const target = targets[index] || 0;
+            const speed = target / 100;
+
+            const interval = setInterval(() => {
+                if (count < target) {
+                    count += speed;
+                    el.innerText = Math.floor(count);
+                } else {
+                    el.innerText = target;
+                    clearInterval(interval);
+                }
+            }, 30);
+        });
+
+        animated = true;
     }
-}, false);
 
-// Also check on page load
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        if (!countersStarted) {
-            const statsSection = document.querySelector('.why-choose');
-            if (statsSection && isElementInViewport(statsSection)) {
-                countersStarted = true;
-                startCounters();
-            }
+    // Listen to scroll
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking && !animated) {
+            window.requestAnimationFrame(() => {
+                const section = document.querySelector('.why-choose');
+                if (section) {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight && rect.top >= -rect.height) {
+                        animate();
+                    }
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
-    }, 100);
-});
+    });
+
+    // Try on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(animate, 100);
+        });
+    } else {
+        setTimeout(animate, 100);
+    }
+})();
 
 // Smooth scroll for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
