@@ -586,6 +586,37 @@ body {
     opacity: 0.95;
 }
 
+.co-founder-section {
+    padding: 80px 0;
+    background: var(--light-bg);
+}
+
+.co-founder-section .founder-content--reverse {
+    direction: ltr;
+}
+
+.co-founder-section .founder-content--reverse .founder-image {
+    order: 2;
+}
+
+.co-founder-section .founder-content--reverse .founder-info {
+    order: 1;
+}
+
+.co-founder-section .founder-info h3 {
+    color: var(--primary-orange);
+    opacity: 1;
+}
+
+.co-founder-section .founder-info h2 {
+    color: var(--text-dark);
+}
+
+.co-founder-section .founder-info p {
+    color: var(--text-light);
+    opacity: 1;
+}
+
 /* Footer */
 .footer {
     background: var(--dark-bg);
