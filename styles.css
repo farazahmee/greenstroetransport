@@ -298,12 +298,22 @@ body {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
+    transition: all 0.3s ease;
 }
 
 .service-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    background: var(--primary-orange);
+    color: var(--white);
+}
+
+.service-card:hover h4 {
+    color: var(--white);
+}
+
+.service-card:hover p {
+    color: #f0f0f0;
 }
 
 .service-card h4 {
