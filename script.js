@@ -1,85 +1,104 @@
-// Ultra-reliable counter animation
+// Counter Animation - Simple and Direct
 (function() {
-    let animated = false;
+    console.log('Script loaded, waiting for DOM...');
+    
+    let hasAnimated = false;
 
-    function animate() {
-        if (animated) return;
+    function runCounters() {
+        console.log('Running counter animation...');
+        if (hasAnimated) {
+            console.log('Already animated, skipping');
+            return;
+        }
 
-        const elements = document.querySelectorAll('.counter');
+        const counters = document.querySelectorAll('.counter');
+        console.log('Found ' + counters.length + ' counters');
+
+        if (counters.length === 0) return;
+
+        hasAnimated = true;
+
+        // Counter targets
         const targets = [60, 2640, 2836, 75];
 
-        elements.forEach((el, index) => {
-            let count = 0;
-            const target = targets[index] || 0;
-            const speed = target / 100;
+        counters.forEach((counter, i) => {
+            console.log('Animating counter ' + i + ' to ' + targets[i]);
+            
+            let current = 0;
+            const target = targets[i];
+            const step = target / 100;
 
-            const interval = setInterval(() => {
-                if (count < target) {
-                    count += speed;
-                    el.innerText = Math.floor(count);
+            const countdown = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    counter.textContent = target;
+                    clearInterval(countdown);
                 } else {
-                    el.innerText = target;
-                    clearInterval(interval);
+                    counter.textContent = Math.floor(current);
                 }
-            }, 30);
+            }, 25);
         });
-
-        animated = true;
     }
 
-    // Listen to scroll
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking && !animated) {
-            window.requestAnimationFrame(() => {
-                const section = document.querySelector('.why-choose');
-                if (section) {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top <= window.innerHeight && rect.top >= -rect.height) {
-                        animate();
-                    }
-                }
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-
-    // Try on load
+    // Try to run on DOMContentLoaded
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(animate, 100);
+            console.log('DOMContentLoaded fired');
+            setTimeout(runCounters, 500);
         });
     } else {
-        setTimeout(animate, 100);
+        console.log('DOM already loaded');
+        setTimeout(runCounters, 500);
     }
+
+    // Also listen to scroll
+    window.addEventListener('scroll', () => {
+        if (hasAnimated) return;
+
+        const section = document.querySelector('.why-choose');
+        if (!section) return;
+
+        const rect = section.getBoundingClientRect();
+        const isVisible = (rect.top < window.innerHeight) && (rect.bottom > 0);
+
+        if (isVisible) {
+            console.log('Section visible, starting animation');
+            runCounters();
+        }
+    }, { passive: true });
+
+    // Run immediately if section is already visible
+    window.addEventListener('load', () => {
+        console.log('Page fully loaded');
+        setTimeout(runCounters, 100);
+    });
 })();
 
 // Smooth scroll for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href !== '#' && document.querySelector(href)) {
-            e.preventDefault();
-            document.querySelector(href).scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && document.querySelector(href)) {
+                e.preventDefault();
+                document.querySelector(href).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
 });
 
 // Newsletter form submission
-const newsletterForm = document.querySelector('.newsletter-form');
-if (newsletterForm) {
-    newsletterForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = this.querySelector('input[type="email"]').value;
-        alert(`Thank you for subscribing with ${email}`);
-        this.reset();
-    });
-}
-
-// Mobile menu toggle (if needed in future)
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('GreenStone Transport website loaded');
+document.addEventListener('DOMContentLoaded', () => {
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing with ${email}`);
+            this.reset();
+        });
+    }
+    console.log('GreenStone Transport website fully loaded');
 });
