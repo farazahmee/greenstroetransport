@@ -1,83 +1,65 @@
-// Counter Animation - Simple and Direct
-(function() {
-    console.log('Script loaded, waiting for DOM...');
+// Counter Animation using Intersection Observer
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Loaded - Starting counter setup');
     
-    let hasAnimated = false;
+    // Get all counters
+    const counters = document.querySelectorAll('.counter');
+    console.log('Found ' + counters.length + ' counter elements');
+    
+    // Counter data
+    const data = [
+        { counter: counters[0], target: 60 },
+        { counter: counters[1], target: 2640 },
+        { counter: counters[2], target: 2836 },
+        { counter: counters[3], target: 75 }
+    ];
 
-    function runCounters() {
-        console.log('Running counter animation...');
-        if (hasAnimated) {
-            console.log('Already animated, skipping');
-            return;
-        }
-
-        const counters = document.querySelectorAll('.counter');
-        console.log('Found ' + counters.length + ' counters');
-
-        if (counters.length === 0) return;
-
-        hasAnimated = true;
-
-        // Counter targets
-        const targets = [60, 2640, 2836, 75];
-
-        counters.forEach((counter, i) => {
-            console.log('Animating counter ' + i + ' to ' + targets[i]);
-            
-            let current = 0;
-            const target = targets[i];
-            const step = target / 100;
-
-            const countdown = setInterval(() => {
-                current += step;
-                if (current >= target) {
-                    counter.textContent = target;
-                    clearInterval(countdown);
-                } else {
-                    counter.textContent = Math.floor(current);
-                }
-            }, 25);
-        });
+    function startCount(counter, target) {
+        console.log('Starting count to ' + target);
+        let count = 0;
+        const step = target / 150;
+        
+        const timer = setInterval(() => {
+            count += step;
+            if (count >= target) {
+                counter.textContent = target;
+                clearInterval(timer);
+                console.log('Count finished: ' + target);
+            } else {
+                counter.textContent = Math.floor(count);
+            }
+        }, 20);
     }
 
-    // Try to run on DOMContentLoaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOMContentLoaded fired');
-            setTimeout(runCounters, 500);
+    // Use Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                console.log('Stats section visible - starting animations');
+                data.forEach(item => {
+                    if (item.counter) {
+                        startCount(item.counter, item.target);
+                    }
+                });
+                observer.unobserve(entry.target);
+            }
         });
+    }, { threshold: 0.5 });
+
+    // Observe the stats section
+    const statsSection = document.querySelector('.stats-grid');
+    if (statsSection) {
+        console.log('Observing stats section');
+        observer.observe(statsSection);
     } else {
-        console.log('DOM already loaded');
-        setTimeout(runCounters, 500);
+        console.log('Stats section not found!');
     }
+});
 
-    // Also listen to scroll
-    window.addEventListener('scroll', () => {
-        if (hasAnimated) return;
-
-        const section = document.querySelector('.why-choose');
-        if (!section) return;
-
-        const rect = section.getBoundingClientRect();
-        const isVisible = (rect.top < window.innerHeight) && (rect.bottom > 0);
-
-        if (isVisible) {
-            console.log('Section visible, starting animation');
-            runCounters();
-        }
-    }, { passive: true });
-
-    // Run immediately if section is already visible
-    window.addEventListener('load', () => {
-        console.log('Page fully loaded');
-        setTimeout(runCounters, 100);
-    });
-})();
-
-// Smooth scroll for navigation links
+// Smooth scroll for navigation
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href !== '#' && document.querySelector(href)) {
                 e.preventDefault();
@@ -87,18 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    console.log('Smooth scroll setup complete');
 });
 
-// Newsletter form submission
+// Newsletter
 document.addEventListener('DOMContentLoaded', () => {
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
+    const form = document.querySelector('.newsletter-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
-            alert(`Thank you for subscribing with ${email}`);
+            alert('Thank you for subscribing with ' + email);
             this.reset();
         });
     }
-    console.log('GreenStone Transport website fully loaded');
 });
