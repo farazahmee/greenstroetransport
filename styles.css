@@ -45,6 +45,10 @@ body {
     align-items: center;
 }
 
+.logo a {
+    text-decoration: none;
+}
+
 .logo h2 {
     color: var(--primary-orange);
     font-size: 24px;
@@ -197,6 +201,14 @@ body {
 .btn-secondary:hover {
     background: var(--primary-orange);
     color: var(--white);
+}
+
+.about-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
 }
 
 .about-images {
