@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GreenStone Transport - Premium Bus & Coach Rental Services
 
 A modern, responsive, static website for GreenStone Transport built with HTML5, CSS3, and JavaScript.
@@ -475,3 +476,6 @@ Before going live:
 
 **Last Updated:** April 2024
 **Version:** 1.0.0
+=======
+# greenstroetransport
+>>>>>>> 8e34dcaa3f62f18a62d219492950fddfa6c7e855
