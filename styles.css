@@ -181,7 +181,7 @@ body {
 }
 
 .cta-button:hover {
-    background: darken(var(--secondary-orange), 10%);
+    background: #e67e2a;
     transform: translateY(-2px);
 }
 
