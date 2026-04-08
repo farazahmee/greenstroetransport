@@ -421,6 +421,11 @@ body {
     object-fit: cover;
 }
 
+.bus-image img.fleet-image-contain {
+    object-fit: contain;
+    background: #f5f5f5;
+}
+
 .bus-card h4 {
     padding: 20px 20px 10px;
     font-size: 18px;
