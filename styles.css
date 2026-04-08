@@ -224,6 +224,15 @@ body {
     height: 300px;
 }
 
+.about-images-single {
+    display: block;
+}
+
+.about-images-single img {
+    height: 300px;
+    object-position: center;
+}
+
 /* Why Choose Us */
 .why-choose {
     background: linear-gradient(135deg, var(--dark-bg) 0%, #2d2d2d 100%);
